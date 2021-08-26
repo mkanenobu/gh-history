@@ -1,0 +1,17 @@
+#!/bin/bash
+set -e
+
+# show brach checkout history
+
+if [ ! type -p uniq >/dev/null ]; then
+  echo "'uniq' not found on the system" >&2
+  exit 1
+fi
+
+if [ ! type -p tac >/dev/null ]; then
+  echo "'tac' not found on the system" >&2
+  exit 1
+fi
+
+git --no-pager reflog | awk '$3 == "checkout:" && /moving from/ {print $8}' | uniq | tac
+
